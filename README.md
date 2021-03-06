@@ -12,4 +12,6 @@ Steps:
 4. ```docker-compose exec app ls -l```
 5. ```docker-compose exec app composer install```
 6. ```docker-compose exec app php artisan key:generate```
+7. ```docker-compose exec app php artisan migrate```
+8. ```docker exec -it app-name /bin/bash```
 7. bingo.. :D
