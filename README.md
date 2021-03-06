@@ -15,4 +15,5 @@ Steps:
 6. ```docker-compose exec app php artisan key:generate```
 7. ```docker-compose exec app php artisan migrate```
 8. ```docker exec -it app-name /bin/bash```
-7. bingo.. 😃
+9. Make sure that your host name should be ```mysql```
+10. bingo.. 😃
