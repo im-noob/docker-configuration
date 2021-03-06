@@ -7,18 +7,18 @@ services:
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: travellist
-    container_name: travellist-app
+    image: laravel
+    container_name: laravel-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./:/var/www
     networks:
-      - travellist
+      - laravel
 
   db:
     image: mysql:5.7
-    container_name: travellist-db
+    container_name: laravel-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -27,14 +27,14 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+#    volumes:
+#      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
-      - travellist
+      - laravel
 
   nginx:
     image: nginx:alpine
-    container_name: travellist-nginx
+    container_name: laravel-nginx
     restart: unless-stopped
     ports:
       - 8000:80
@@ -42,8 +42,8 @@ services:
       - ./:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
-      - travellist
+      - laravel
 
 networks:
-  travellist:
+  laravel:
     driver: bridge
