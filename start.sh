@@ -23,3 +23,6 @@ docker-compose exec app php artisan route:clear
 
 # for removing all stopped processes
 # docker rm $(docker ps -a -q)
+
+# for checking the logs
+# docker logs laravel-app
