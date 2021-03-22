@@ -1,3 +1,6 @@
+# comping .env
+cp .env.example .env
+
 # spinning up docker image
 docker-compose build app
 docker-compose up -d
@@ -6,7 +9,6 @@ docker-compose up -d
 sleep 30
 
 docker-compose exec app composer install
-docker-compose exec app cp .env.example .env
 docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan migrate --seed
 docker-compose exec app php artisan cache:clear
@@ -26,3 +28,6 @@ docker-compose exec app php artisan route:clear
 
 # for checking the logs
 # docker logs laravel-app
+
+# for removing everything from docker
+# docker system prune -a
