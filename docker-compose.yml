@@ -27,7 +27,7 @@ services:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+#      MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
 #    volumes:
@@ -54,6 +54,8 @@ services:
     container_name: laravel-php
     volumes:
       - ./:/var/www
+      - ./docker-compose/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+
     ports:
       - 9000:9000
     networks:
