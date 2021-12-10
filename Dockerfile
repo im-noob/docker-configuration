@@ -4,6 +4,11 @@ FROM php:7.4-fpm
 ARG user
 ARG uid
 
+# IF arugment not working
+#ARG user=laravel
+#ARG uid=1000
+
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
