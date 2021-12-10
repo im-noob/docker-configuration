@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
-      - ./:/var/www
+      - ./SRC_FOLDER:/var/www
     networks:
       - laravel
 
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - 3306:3306
+      - 55555:3306
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -42,7 +42,7 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./:/var/www
+      - ./SRC_FOLDER:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - laravel
@@ -53,13 +53,39 @@ services:
       dockerfile: Dockerfile
     container_name: laravel-php
     volumes:
-      - ./:/var/www
+      - ./SRC_FOLDER:/var/www
       - ./docker-compose/php/php.ini:/usr/local/etc/php/conf.d/local.ini
 
     ports:
       - 9000:9000
     networks:
       - laravel
+
+  adminer_container:
+    image: adminer:latest
+    container_name: laravel-adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+      ADMINER_DESIGN: galkaev
+    ports:
+      - 4444:8080
+    networks:
+      - laravel
+
+  phpmyadmin:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 4443:80
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+
+    networks:
+      - laravel
+
 
 networks:
   laravel:
