@@ -3,23 +3,23 @@ services:
   app:
     build:
       args:
-        user: php72
+        user: php81
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: php72
-    container_name: php72-app
+    image: php81
+    container_name: php81-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./SRC_FOLDER:/var/www
     networks:
-      - php72
+      - php81
 
   mysql:
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
-    container_name: php72-mysql
+    container_name: php81-mysql
     restart: unless-stopped
     tty: true
     ports:
@@ -36,11 +36,11 @@ services:
 #    volumes:
 #      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
-      - php72
+      - php81
 
   nginx:
     image: nginx:stable-alpine
-    container_name: php72-nginx
+    container_name: php81-nginx
     restart: unless-stopped
     ports:
       - 8000:80
@@ -48,13 +48,13 @@ services:
       - ./SRC_FOLDER:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
-      - php72
+      - php81
 
   php:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: php72-php
+    container_name: php81-php
     volumes:
       - ./SRC_FOLDER:/var/www
       - ./docker-compose/php/php.ini:/usr/local/etc/php/conf.d/local.ini
@@ -63,24 +63,24 @@ services:
     ports:
       - 9000:9000
     networks:
-      - php72
+      - php81
 
   adminer_container:
     image: adminer:latest
-    container_name: php72-adminer
+    container_name: php81-adminer
     environment:
       ADMINER_DEFAULT_SERVER: mysql
 #      ADMINER_DESIGN: galkaev
     ports:
       - 4444:8080
     networks:
-      - php72
+      - php81
 
   phpmyadmin:
     depends_on:
       - mysql
     image: phpmyadmin/phpmyadmin
-    container_name: php72-phpmyadmin
+    container_name: php81-phpmyadmin
     restart: always
     ports:
       - 4442:80
@@ -89,9 +89,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
 
     networks:
-      - php72
+      - php81
 
 
 networks:
-  php72:
+  php81:
     driver: bridge
