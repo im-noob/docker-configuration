@@ -3,26 +3,29 @@ services:
   app:
     build:
       args:
-        user: laravel
+        user: php72
         uid: 1000
       context: ./
       dockerfile: Dockerfile
-    image: laravel
-    container_name: laravel-app
+    image: php72
+    container_name: php72-app
     restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./SRC_FOLDER:/var/www
     networks:
-      - laravel
+      - php72
 
   mysql:
     image: mysql:8.0
-    container_name: laravel-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: php72-mysql
     restart: unless-stopped
     tty: true
     ports:
       - 55555:3306
+    volumes:
+      - ./docker-compose/mysql/my.cnf:/etc/mysql/my.cnf
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -33,11 +36,11 @@ services:
 #    volumes:
 #      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
     networks:
-      - laravel
+      - php72
 
   nginx:
     image: nginx:stable-alpine
-    container_name: laravel-nginx
+    container_name: php72-nginx
     restart: unless-stopped
     ports:
       - 8000:80
@@ -45,48 +48,50 @@ services:
       - ./SRC_FOLDER:/var/www
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
-      - laravel
+      - php72
 
   php:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: laravel-php
+    container_name: php72-php
     volumes:
       - ./SRC_FOLDER:/var/www
       - ./docker-compose/php/php.ini:/usr/local/etc/php/conf.d/local.ini
+#      - ./docker-compose/php/php.ini:/usr/local/etc/php.ini
 
     ports:
       - 9000:9000
     networks:
-      - laravel
+      - php72
 
   adminer_container:
     image: adminer:latest
-    container_name: laravel-adminer
+    container_name: php72-adminer
     environment:
       ADMINER_DEFAULT_SERVER: mysql
-      ADMINER_DESIGN: galkaev
+#      ADMINER_DESIGN: galkaev
     ports:
       - 4444:8080
     networks:
-      - laravel
+      - php72
 
   phpmyadmin:
     depends_on:
       - mysql
     image: phpmyadmin/phpmyadmin
+    container_name: php72-phpmyadmin
     restart: always
     ports:
-      - 4443:80
+      - 4442:80
     environment:
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
 
     networks:
-      - laravel
+      - php72
 
 
 networks:
-  laravel:
+  php72:
     driver: bridge

@@ -1,12 +1,12 @@
-FROM php:7.4-fpm
+FROM php:7.2-fpm
 
 # Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+#ARG user
+#ARG uid
 
 # IF arugment not working
-#ARG user=laravel
-#ARG uid=1000
+ARG user=php72
+ARG uid=1000
 
 
 # Install system dependencies
@@ -24,6 +24,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+RUN docker-php-ext-install zip exif pcntl bcmath
+
+RUN docker-php-ext-configure gd
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
